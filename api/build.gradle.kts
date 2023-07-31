@@ -2,9 +2,6 @@ plugins {
     `java-library`
 }
 
-group = "com.owen1212055"
-version = parent!!.version
-
 repositories {
     maven("https://papermc.io/repo/repository/maven-public/")
 }

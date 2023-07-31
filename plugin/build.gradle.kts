@@ -5,8 +5,6 @@ plugins {
     `maven-publish`
 }
 
-group = "com.owen1212055"
-
 val nmsProject = project(":nms:nms-impl")
 dependencies {
     // include all impls
