@@ -1,5 +1,6 @@
 plugins {
     java
+    id("com.github.johnrengelman.shadow") version "7.1.0"
     id("xyz.jpenilla.run-paper") version "2.0.1"
     `maven-publish`
 }
@@ -23,8 +24,21 @@ tasks {
         options.release.set(17)
     }
 
+    shadowJar {
+        dependencies {
+            relocate("org.bstats", "com.owen1212055.${rootProject.name}.libs.bstats")
+        }
+
+        archiveClassifier.set("")
+        archiveBaseName.set("${parent?.project?.name}-${project.name}")
+    }
+
     jar {
         archiveBaseName.set("${parent?.project?.name}-${project.name}")
+    }
+
+    assemble {
+        dependsOn("shadowJar")
     }
 
     runServer {
