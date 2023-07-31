@@ -4,9 +4,6 @@ plugins {
     id("com.github.johnrengelman.shadow") version "7.1.0"
 }
 
-group = "ltd.lemongaming"
-version = "1.5.0"
-
 tasks {
     shadowJar {
         archiveClassifier.set("")
@@ -57,6 +54,14 @@ allprojects {
                 from(components["java"])
                 artifactId = providers.gradleProperty("name").get() + "-" + project.name
             }
+        }
+    }
+}
+
+publishing {
+    publications {
+        getByName<MavenPublication>("mavenJava") {
+            artifactId = providers.gradleProperty("name").get()
         }
     }
 }
