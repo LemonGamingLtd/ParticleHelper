@@ -6,7 +6,13 @@ plugins {
 
 group = "com.owen1212055"
 
+val nmsProject = project(":nms:nms-impl")
 dependencies {
+    // include all impls
+    for (child in nmsProject.childProjects) {
+        implementation(project(child.value.path, configuration = "reobf"))
+    }
+
     implementation(project(":api"))
     implementation(project(":nms:nms-interface"))
 }
@@ -21,6 +27,10 @@ tasks {
         dependencies {
             relocate("org.bstats", "com.owen1212055.${rootProject.name}.libs.bstats")
         }
+    }
+
+    assemble {
+        dependsOn("shadowJar")
     }
 
     runServer {

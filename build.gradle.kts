@@ -30,8 +30,7 @@ publishing {
 
             groupId = group as String
             artifactId = "particlehelper"
-            from(project(":api").components["java"])
-//            artifact((project(":nms").tasks["reobfJar"] as io.papermc.paperweight.tasks.RemapJar).outputJar)
+            from(project(":plugin").components["java"])
         }
 
         tasks.withType<GenerateModuleMetadata> {
