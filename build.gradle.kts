@@ -25,9 +25,6 @@ subprojects {
 publishing {
     publications {
         create<MavenPublication>("maven") {
-            evaluationDependsOn(":api")
-            evaluationDependsOn(":nms")
-
             groupId = group as String
             artifactId = "particlehelper"
             from(project(":plugin").components["java"])
