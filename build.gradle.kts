@@ -21,28 +21,3 @@ subprojects {
         compileOnly("io.papermc.paper:paper-api:1.19.2-R0.1-SNAPSHOT")
     }
 }
-
-publishing {
-    publications {
-        publications {
-            create<MavenPublication>("mavenJava") {
-                from(components["java"])
-            }
-        }
-
-        tasks.withType<GenerateModuleMetadata> {
-            enabled = false
-        }
-    }
-
-    repositories {
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/LemonGamingLtd/ParticleHelper")
-            credentials {
-                username = System.getenv("GITHUB_ACTOR")
-                password = System.getenv("GITHUB_TOKEN")
-            }
-        }
-    }
-}

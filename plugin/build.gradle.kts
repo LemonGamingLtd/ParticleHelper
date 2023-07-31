@@ -18,6 +18,31 @@ dependencies {
     implementation(project(":nms:nms-interface"))
 }
 
+publishing {
+    publications {
+        publications {
+            create<MavenPublication>("mavenJava") {
+                from(components["java"])
+            }
+        }
+
+        tasks.withType<GenerateModuleMetadata> {
+            enabled = false
+        }
+    }
+
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/LemonGamingLtd/ParticleHelper")
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
+}
+
 tasks {
     compileJava {
         options.encoding = Charsets.UTF_8.name()
@@ -28,6 +53,13 @@ tasks {
         dependencies {
             relocate("org.bstats", "com.owen1212055.${rootProject.name}.libs.bstats")
         }
+
+        archiveClassifier.set("")
+        archiveBaseName.set("${parent?.project?.name}-${project.name}")
+    }
+
+    jar {
+        archiveBaseName.set("${parent?.project?.name}-${project.name}")
     }
 
     assemble {
