@@ -7,6 +7,23 @@ plugins {
 group = "ltd.lemongaming"
 version = "1.5.0"
 
+tasks {
+    shadowJar {
+        archiveClassifier.set("")
+    }
+}
+
+val nmsProject = project(":nms:nms-impl")
+dependencies {
+    // include all impls
+    for (child in nmsProject.childProjects) {
+        implementation(project(child.value.path, configuration = "reobf"))
+    }
+
+    implementation(project(":api"))
+    implementation(project(":nms:nms-interface"))
+}
+
 publishing {
     publications {
         create<MavenPublication>("mavenJava") {
@@ -16,11 +33,11 @@ publishing {
 
     repositories {
         maven {
-            name = "GitHubPackages"
             url = uri("https://maven.pkg.github.com/LemonGamingLtd/ParticleHelper")
             credentials {
-                username = System.getenv("GITHUB_ACTOR")
-                password = System.getenv("GITHUB_TOKEN")
+                // sadly, we have to do this until fine-grained tokens get support for GitHub Packages
+                username = providers.gradleProperty("lgGithubUser").getOrElse(System.getenv("GITHUB_ACTOR"))
+                password = providers.gradleProperty("lgGithubToken").getOrElse(System.getenv("GITHUB_TOKEN"))
             }
         }
     }
