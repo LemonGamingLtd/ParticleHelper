@@ -6,7 +6,7 @@ pluginManagement {
     }
 }
 
-rootProject.name = "ParticleHelper"
+rootProject.name = "particle-helper"
 
 plugins {
     id("com.pablisco.gradle.auto.include") version "1.3"
