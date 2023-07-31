@@ -24,25 +24,6 @@ dependencies {
     implementation(project(":nms:nms-interface"))
 }
 
-publishing {
-    publications {
-        create<MavenPublication>("mavenJava") {
-            from(components["java"])
-        }
-    }
-
-    repositories {
-        maven {
-            url = uri("https://maven.pkg.github.com/LemonGamingLtd/ParticleHelper")
-            credentials {
-                // sadly, we have to do this until fine-grained tokens get support for GitHub Packages
-                username = providers.gradleProperty("lgGithubUser").getOrElse(System.getenv("GITHUB_ACTOR"))
-                password = providers.gradleProperty("lgGithubToken").getOrElse(System.getenv("GITHUB_TOKEN"))
-            }
-        }
-    }
-}
-
 allprojects {
     apply(plugin = "java")
     apply(plugin = "maven-publish")
@@ -57,5 +38,25 @@ allprojects {
 
     dependencies {
         compileOnly("io.papermc.paper:paper-api:1.19.2-R0.1-SNAPSHOT")
+    }
+
+    publishing {
+        repositories {
+            maven {
+                url = uri("https://maven.pkg.github.com/LemonGamingLtd/ParticleHelper")
+                credentials {
+                    // sadly, we have to do this until fine-grained tokens get support for GitHub Packages
+                    username = providers.gradleProperty("lgGithubUser").getOrElse(System.getenv("GITHUB_ACTOR"))
+                    password = providers.gradleProperty("lgGithubToken").getOrElse(System.getenv("GITHUB_TOKEN"))
+                }
+            }
+        }
+
+        publications {
+            create<MavenPublication>("mavenJava") {
+                from(components["java"])
+                artifactId = providers.gradleProperty("name").get() + "-" + project.name
+            }
+        }
     }
 }
