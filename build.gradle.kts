@@ -24,10 +24,10 @@ subprojects {
 
 publishing {
     publications {
-        create<MavenPublication>("maven") {
-            groupId = group as String
-            artifactId = "particlehelper"
-            from(project(":plugin").components["java"])
+        publications {
+            create<MavenPublication>("mavenJava") {
+                from(components["java"])
+            }
         }
 
         tasks.withType<GenerateModuleMetadata> {
@@ -37,13 +37,12 @@ publishing {
 
     repositories {
         maven {
-            name = "bytecodespace"
-
-            val releasesRepoUrl = uri("https://repo.bytecode.space/repository/maven-releases/")
-            val snapshotsRepoUrl = uri("https://repo.bytecode.space/repository/maven-snapshots/")
-            url = if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
-
-            credentials(PasswordCredentials::class)
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/LemonGamingLtd/ParticleHelper")
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
+            }
         }
     }
 }
