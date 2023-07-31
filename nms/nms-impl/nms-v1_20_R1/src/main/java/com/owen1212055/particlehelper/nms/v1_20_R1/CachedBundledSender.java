@@ -1,7 +1,8 @@
-package com.owen1212055.particlehelper.nms;
+package com.owen1212055.particlehelper.nms.v1_20_R1;
 
 import com.owen1212055.particlehelper.api.particle.compiled.CompiledParticle;
 import com.owen1212055.particlehelper.api.particle.compiled.simple.SimpleCompiledParticle;
+import com.owen1212055.particlehelper.nms.ParticleHelper;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -9,8 +10,8 @@ import net.minecraft.network.protocol.game.ClientboundBundlePacket;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
-import org.bukkit.craftbukkit.v1_19_R3.CraftParticle;
-import org.bukkit.craftbukkit.v1_19_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_20_R1.CraftParticle;
+import org.bukkit.craftbukkit.v1_20_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -18,11 +19,13 @@ import java.util.List;
 
 public class CachedBundledSender implements CompiledParticle {
 
+    private final ParticleHelper helper;
     private final CompiledParticle[] simpleCompiledParticles;
     private ClientboundBundlePacket packet;
     private Location cached;
 
-    public CachedBundledSender(CompiledParticle[] simpleCompiledParticles) {
+    public CachedBundledSender(ParticleHelper helper, CompiledParticle[] simpleCompiledParticles) {
+        this.helper = helper;
         this.simpleCompiledParticles = simpleCompiledParticles;
     }
 
@@ -50,13 +53,13 @@ public class CachedBundledSender implements CompiledParticle {
             SimpleCompiledParticle compiled = (SimpleCompiledParticle) simpleCompiledParticle;
 
             NamespacedKey key = compiled.particle.getKey();
-            Particle bukkitParticle = ParticleHelper.BUKKIT_MAP.get(key);
+            Particle bukkitParticle = helper.getBukkitParticle(key);
             if (bukkitParticle == null) {
                 throw new UnsupportedOperationException("Could not find particle %s, please report this.".formatted(key.toString()));
             }
 
             ParticleOptions nmsParticle = CraftParticle.toNMS(bukkitParticle, compiled.data);
-            particles.add(ParticleHelper.createPacket(nmsParticle, location, compiled));
+            particles.add(ParticleHelperImpl.createPacket(nmsParticle, location, compiled));
         }
 
         return new ClientboundBundlePacket(particles);

@@ -8,4 +8,6 @@ pluginManagement {
 
 rootProject.name = "ParticleHelper"
 
-include("api", "nms", "plugin")
+plugins {
+    id("com.pablisco.gradle.auto.include") version "1.3"
+}

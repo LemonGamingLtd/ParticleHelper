@@ -6,14 +6,9 @@ plugins {
 
 group = "com.owen1212055"
 
-repositories {
-    mavenCentral()
-    maven("https://papermc.io/repo/repository/maven-public/")
-}
-
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.19.2-R0.1-SNAPSHOT")
-    implementation(project(":nms", configuration = "reobf"))
+    implementation(project(":api"))
+    implementation(project(":nms:nms-interface"))
 }
 
 tasks {
