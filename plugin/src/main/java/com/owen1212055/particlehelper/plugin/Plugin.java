@@ -22,7 +22,7 @@ public class Plugin extends JavaPlugin implements Listener, ParticleChannel {
 
     @Override
     public BiConsumer<Player, Location> getSender(SimpleCompiledParticle particle) {
-        return ParticleHelper.getInstance().getParticleSender(particle);
+        return ParticleHelper.getInstance().getSender(particle);
     }
 
     @Override

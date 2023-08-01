@@ -1,6 +1,8 @@
 package com.owen1212055.particlehelper.nms;
 
 import com.owen1212055.particlehelper.api.particle.compiled.CompiledParticle;
+import com.owen1212055.particlehelper.api.particle.compiled.simple.ParticleChannel;
+import com.owen1212055.particlehelper.api.particle.compiled.simple.SimpleCompiledParticle;
 import java.lang.reflect.InvocationTargetException;
 import java.util.function.BiConsumer;
 import org.bukkit.Bukkit;
@@ -10,7 +12,7 @@ import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class ParticleHelper {
+public abstract class ParticleHelper implements ParticleChannel {
 
 	private static final @NotNull ParticleHelper instance = getParticleHelperNms();
 
@@ -20,9 +22,14 @@ public abstract class ParticleHelper {
 
 	public abstract Particle getBukkitParticle(NamespacedKey key);
 
-	public abstract BiConsumer<Player, Location> getParticleSender(CompiledParticle compiledParticle);
+	public abstract BiConsumer<Player, Location> getSender(CompiledParticle compiledParticle);
 
 	public abstract CompiledParticle getGroupedSender(CompiledParticle... simpleCompiledParticles);
+
+	@Override
+	public final BiConsumer<Player, Location> getSender(SimpleCompiledParticle compiledParticle) {
+		return getSender((CompiledParticle) compiledParticle);
+	}
 
 	public static ParticleHelper getParticleHelperNms() {
 		String version = Bukkit.getServer().getClass().getPackage().getName().split("[.]")[3];

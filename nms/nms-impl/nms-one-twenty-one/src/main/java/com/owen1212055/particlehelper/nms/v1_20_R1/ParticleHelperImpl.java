@@ -54,7 +54,7 @@ public class ParticleHelperImpl extends ParticleHelper {
 	}
 
 	@Override
-	public BiConsumer<Player, Location> getParticleSender(CompiledParticle compiledParticle) {
+	public BiConsumer<Player, Location> getSender(CompiledParticle compiledParticle) {
 		SimpleCompiledParticle compiled;
 		if (!(compiledParticle instanceof SimpleCompiledParticle)) {
 			throw new UnsupportedOperationException("Got instance of: " + compiledParticle);

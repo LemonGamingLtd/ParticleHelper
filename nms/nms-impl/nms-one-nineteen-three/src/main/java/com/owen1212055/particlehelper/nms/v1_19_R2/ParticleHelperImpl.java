@@ -42,13 +42,13 @@ public class ParticleHelperImpl extends ParticleHelper {
 		return new CompiledParticle() {
 			@Override
 			public void send(Player player, Location location) {
-				getParticleSender(this).accept(player, location);
+				getSender(this).accept(player, location);
 			}
 		};
 	}
 
 	@Override
-	public BiConsumer<Player, Location> getParticleSender(CompiledParticle compiledParticle) {
+	public BiConsumer<Player, Location> getSender(CompiledParticle compiledParticle) {
 		SimpleCompiledParticle compiled;
 		if (!(compiledParticle instanceof SimpleCompiledParticle)) {
 			throw new UnsupportedOperationException("Got instance of: " + compiledParticle);

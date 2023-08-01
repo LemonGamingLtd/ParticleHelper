@@ -58,14 +58,13 @@ public final class ParticleHelper {
         }
 
         try {
-            MethodHandle senderHandle = MethodHandles.lookup().findStatic(Class.forName("com.owen1212055.particlehelper.nms.ParticleHelper"), "getParticleSender", MethodType.methodType(BiConsumer.class, CompiledParticle.class));
+            ParticleChannel nmsChannel = getNmsInstance();
 
-            MethodHandle groupedSender = MethodHandles.lookup().findStatic(Class.forName("com.owen1212055.particlehelper.nms.ParticleHelper"), "getGroupedSender", MethodType.methodType(CompiledParticle.class, CompiledParticle[].class));
             ACTIVE_PARTICLE_CHANNEL = new ParticleChannel() {
                 @Override
                 public BiConsumer<Player, Location> getSender(SimpleCompiledParticle compiledParticle) {
                     try {
-                        return (BiConsumer<Player, Location>) senderHandle.invoke(compiledParticle);
+                        return nmsChannel.getSender(compiledParticle);
                     } catch (Throwable e) {
                         if (!isBukkit) {
                             LOGGER.log(Level.WARNING, "Failed to fetch certain NMS classes! Using bukkit API (less performant & ignores forceSend).", e);
@@ -84,7 +83,7 @@ public final class ParticleHelper {
                 @Override
                 public CompiledParticle getGroupedSender(CompiledParticle[] particles) {
                     try {
-                        return (CompiledParticle) groupedSender.invoke((CompiledParticle[]) particles);
+                        return nmsChannel.getGroupedSender(particles);
                     } catch (Throwable e) {
                         if (!isBukkit) {
                             LOGGER.log(Level.WARNING, "Failed to fetch certain NMS classes! Using bukkit API (less performant & ignores forceSend).", e);
@@ -98,10 +97,16 @@ public final class ParticleHelper {
                     }
                 }
             };
-        } catch (Exception e) {
+        } catch (Throwable e) {
             LOGGER.log(Level.WARNING, "Failed to create native particle sender! Using bukkit API (less performant & ignores forceSend).", e);
             bukkitBind();
         }
+    }
+
+    private static ParticleChannel getNmsInstance() throws Throwable {
+        Class<?> nmsChannelClass = Class.forName("com.owen1212055.particlehelper.nms.ParticleHelper");
+        MethodHandle nmsChannelHandle = MethodHandles.lookup().findStatic(nmsChannelClass, "getInstance", MethodType.methodType(nmsChannelClass));
+		return (ParticleChannel) nmsChannelHandle.invoke();
     }
 
     @Nullable
