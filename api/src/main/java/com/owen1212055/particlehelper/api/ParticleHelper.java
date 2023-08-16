@@ -57,6 +57,11 @@ public final class ParticleHelper {
             return;
         }
 
+	if (true) {
+	    bukkitBind();
+	    return;
+	}
+	    
         try {
             ParticleChannel nmsChannel = getNmsInstance();
 
